@@ -3,7 +3,7 @@
 ### **Arquitetura Cloud-Native Serverless de Orquestração GenAI na AWS**
 
 <p align="center">
-  <img src="docs/img/aws_biblical_messenger.png" alt="AWS Biblical Messenger" width="550px">
+  <img src="docs/img/aws_biblical_messenger.png" alt="AWS Biblical Messenger" width="100%">
 </p>
 
 <p align="center">
