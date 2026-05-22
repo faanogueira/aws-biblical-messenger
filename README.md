@@ -239,7 +239,7 @@ chmod +x infrastructure/deploy.sh
 ---
 
 <!-- Início da seção "Contato" -->
-<h2>🌐 Contato e Portfólio</h2>
+<h2>🌐 Contate-me </h2>
 <div>
   <p>Developed by <b>Fábio Nogueira</b></p>
 </div>
