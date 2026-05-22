@@ -1,7 +1,7 @@
 # ✝️ aws-biblical-messenger
 
 <p align="center">
-  <img src="docs/img/banner.png" alt="AWS Biblical Messenger Banner" width="600px">
+  <img src="docs/img/aws_biblical_messenger.png" alt="AWS Biblical Messenger" width="500px">
 </p>
 
 Automação serverless que gera e envia mensagens bíblicas diárias por e-mail, utilizando IA Generativa na AWS.
