@@ -1,0 +1,4 @@
+# Dependências da Lambda
+# boto3 e botocore já estão disponíveis no ambiente Lambda — listados apenas para referência local
+boto3>=1.28.0
+botocore>=1.31.0

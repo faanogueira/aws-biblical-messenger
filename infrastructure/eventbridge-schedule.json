@@ -1,0 +1,19 @@
+{
+  "Name": "biblical-daily-trigger",
+  "Description": "Dispara a Lambda de mensagens bíblicas todos os dias às 06h00 BRT (09h00 UTC)",
+  "ScheduleExpression": "cron(0 9 * * ? *)",
+  "FlexibleTimeWindow": {
+    "Mode": "OFF"
+  },
+  "Target": {
+    "Arn": "arn:aws:lambda:us-east-1:ACCOUNT_ID:function:biblical-daily-message",
+    "Input": "{}"
+  },
+  "State": "ENABLED",
+
+  "_notes": {
+    "cron_explanation": "cron(minuto hora dia mês dia-da-semana ano)",
+    "horario": "09:00 UTC = 06:00 BRT (UTC-3) | Ajuste para UTC-3 direto no console usando timezone America/Bahia",
+    "account_id": "Substitua ACCOUNT_ID pelo ID real da sua conta AWS (12 dígitos)"
+  }
+}

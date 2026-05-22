@@ -1,0 +1,32 @@
+{
+  "table": {
+    "TableName": "biblical-recipients",
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+      { "AttributeName": "email", "KeyType": "HASH" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "email", "AttributeType": "S" }
+    ]
+  },
+
+  "example_item": {
+    "email":              { "S": "faanogueira@gmail.com" },
+    "nome":               { "S": "Fábio Nogueira" },
+    "ativo":              { "BOOL": true },
+    "data_cadastro":      { "S": "2026-05-14T09:00:00" },
+    "ultimo_envio":       { "S": "" },
+    "ultimo_status":      { "S": "" },
+    "ultimo_message_id":  { "S": "" }
+  },
+
+  "attributes": {
+    "email":             "String (PK) — identificador único do destinatário",
+    "nome":              "String     — usado para personalizar o e-mail",
+    "ativo":             "Boolean    — true = recebe | false = pausado (sem excluir histórico)",
+    "data_cadastro":     "String     — ISO 8601, preenchido no cadastro",
+    "ultimo_envio":      "String     — ISO 8601, preenchido pela Lambda após cada envio",
+    "ultimo_status":     "String     — 'ENVIADO' ou 'ERRO:CódigoAWS'",
+    "ultimo_message_id": "String     — MessageId retornado pelo SES para rastreio"
+  }
+}

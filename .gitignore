@@ -1,0 +1,21 @@
+# Credentials and secrets
+.env
+*accessKeys.csv
+*credentials.csv
+BedrockAPIKey*.txt
+Claude Haiku 4-5.txt
+
+# Binary / Office documents
+*.zip
+*.docx
+*.pptx
+
+# Python environment and cache
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# System files
+.DS_Store
