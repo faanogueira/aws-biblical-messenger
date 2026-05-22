@@ -1,4 +1,4 @@
-# ✝️ aws-biblical-messenger
+# ✝️ Mensageiro Bíblico Generativo
 
 <p align="center">
   <img src="docs/img/aws_biblical_messenger.png" alt="AWS Biblical Messenger" width="500px">
