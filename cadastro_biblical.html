@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblical Daily Message — Cadastro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ── Variáveis ─────────────────────────────────────── */
+  :root {
+    --navy:      #0D1B2A;
+    --navy2:     #1A2744;
+    --blue:      #1F4E79;
+    --gold:      #C8A96E;
+    --gold-lt:   #E8D5A3;
+    --gold-dim:  rgba(200,169,110,0.15);
+    --white:     #F8F4EC;
+    --gray:      #94A3B8;
+    --error:     #E07070;
+    --success:   #6DBF9A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--navy);
+    font-family: 'Inter', sans-serif;
+    color: var(--white);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── Fundo animado ─────────────────────────────────── */
+  .bg-canvas {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(31,78,121,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 85% 90%, rgba(200,169,110,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(13,27,42,0.9) 0%, transparent 100%),
+      #0D1B2A;
+  }
+
+  /* Partículas flutuantes */
+  .particle {
+    position: fixed; border-radius: 50%;
+    background: var(--gold);
+    opacity: 0; animation: float-particle linear infinite;
+    pointer-events: none; z-index: 1;
+  }
+
+  @keyframes float-particle {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 0.4; }
+    90%  { opacity: 0.15; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* Grade de linhas decorativas */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(200,169,110,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,110,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* ── Layout ────────────────────────────────────────── */
+  .page {
+    position: relative; z-index: 2;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    width: 100%; max-width: 520px;
+  }
+
+  /* ── Header ────────────────────────────────────────── */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fade-down 0.8s ease both;
+  }
+
+  .cross-symbol {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 2.8rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 20px rgba(200,169,110,0.5));
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { filter: drop-shadow(0 0 12px rgba(200,169,110,0.4)); }
+    50%       { filter: drop-shadow(0 0 28px rgba(200,169,110,0.8)); }
+  }
+
+  .header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+
+  .header h1 span { color: var(--gold); }
+
+  .header .verse {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.0rem;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-top: 0.75rem;
+  }
+
+  /* ── Card do formulário ────────────────────────────── */
+  .card {
+    background: rgba(26,39,68,0.7);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    backdrop-filter: blur(20px);
+    box-shadow:
+      0 0 0 1px rgba(200,169,110,0.05),
+      0 24px 60px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(200,169,110,0.1);
+    animation: fade-up 0.9s ease 0.2s both;
+    position: relative; overflow: hidden;
+  }
+
+  /* Linha dourada no topo do card */
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 10%; right: 10%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 0 0 2px 2px;
+  }
+
+  /* ── Título do card ─────────────────────────────────── */
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: var(--gold-lt);
+    text-align: center;
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Campos ─────────────────────────────────────────── */
+  .field {
+    margin-bottom: 1.4rem;
+    animation: fade-up 0.6s ease both;
+  }
+  .field:nth-child(1) { animation-delay: 0.3s; }
+  .field:nth-child(2) { animation-delay: 0.4s; }
+  .field:nth-child(3) { animation-delay: 0.5s; }
+  .field:nth-child(4) { animation-delay: 0.6s; }
+
+  .field label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .field label .optional {
+    font-weight: 300;
+    color: var(--gray);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.68rem;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-wrap .icon {
+    position: absolute; left: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    opacity: 0.6;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  input, select {
+    width: 100%;
+    background: rgba(13,27,42,0.6);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem 0.75rem 2.6rem;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    -webkit-appearance: none;
+  }
+
+  input::placeholder { color: rgba(148,163,184,0.5); }
+
+  input:focus, select:focus {
+    border-color: var(--gold);
+    background: rgba(13,27,42,0.85);
+    box-shadow: 0 0 0 3px rgba(200,169,110,0.12), 0 0 16px rgba(200,169,110,0.08);
+  }
+
+  input:focus + .icon, select:focus + .icon { opacity: 1; }
+
+  input.error { border-color: var(--error); }
+  input.success { border-color: var(--success); }
+
+  .field-error {
+    font-size: 0.75rem;
+    color: var(--error);
+    margin-top: 0.35rem;
+    display: none;
+    animation: shake 0.3s ease;
+  }
+  .field-error.visible { display: block; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-4px); }
+    75%       { transform: translateX(4px); }
+  }
+
+  /* Select customizado */
+  select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C8A96E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 2.5rem;
+  }
+
+  select option { background: var(--navy2); color: var(--white); }
+
+  /* Campo de telefone com DDI */
+  .phone-wrap {
+    display: flex; gap: 0.5rem;
+  }
+
+  .phone-wrap select {
+    width: 110px; flex-shrink: 0;
+    padding-left: 0.75rem;
+  }
+
+  .phone-wrap input {
+    flex: 1;
+    padding-left: 0.9rem;
+  }
+
+  /* ── Checkbox de aceite ─────────────────────────────── */
+  .consent {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    margin-bottom: 1.6rem;
+    animation: fade-up 0.6s ease 0.65s both;
+  }
+
+  .consent input[type="checkbox"] {
+    width: 18px; height: 18px; flex-shrink: 0;
+    padding: 0; margin-top: 2px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+
+  .consent label {
+    font-size: 0.82rem;
+    color: var(--gray);
+    line-height: 1.5;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .consent label b { color: var(--gold-lt); font-weight: 500; }
+
+  /* ── Botão submit ───────────────────────────────────── */
+  .btn-submit {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background: linear-gradient(135deg, #C8A96E 0%, #A8894E 50%, #C8A96E 100%);
+    background-size: 200% 200%;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--navy);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background-position 0.4s;
+    animation: fade-up 0.6s ease 0.7s both;
+    position: relative; overflow: hidden;
+  }
+
+  .btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(200,169,110,0.35);
+    background-position: 100% 100%;
+  }
+
+  .btn-submit:active:not(:disabled) { transform: translateY(0); }
+
+  .btn-submit:disabled {
+    opacity: 0.6; cursor: not-allowed;
+  }
+
+  .btn-submit .spinner {
+    display: none; width: 16px; height: 16px;
+    border: 2px solid rgba(13,27,42,0.3);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto;
+  }
+
+  .btn-submit.loading .btn-text { display: none; }
+  .btn-submit.loading .spinner  { display: block; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Mensagem de sucesso ────────────────────────────── */
+  .success-panel {
+    display: none; text-align: center;
+    animation: fade-up 0.6s ease both;
+  }
+
+  .success-panel.visible { display: block; }
+
+  .success-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    animation: pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
+  }
+
+  @keyframes pop {
+    0%   { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .success-panel h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .success-panel p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--gray);
+    line-height: 1.7;
+  }
+
+  .success-panel .name-highlight {
+    color: var(--gold-lt);
+    font-style: italic;
+  }
+
+  /* ── Footer ─────────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    margin-top: 1.75rem;
+    font-size: 0.75rem;
+    color: rgba(148,163,184,0.5);
+    animation: fade-up 0.6s ease 0.9s both;
+  }
+
+  .footer a { color: var(--gold); text-decoration: none; opacity: 0.7; }
+  .footer a:hover { opacity: 1; }
+
+  /* ── Divider ─────────────────────────────────────────── */
+  .divider {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin: 0.5rem 0 1.5rem;
+    color: rgba(200,169,110,0.3);
+    font-size: 0.75rem; letter-spacing: 0.1em;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(200,169,110,0.15);
+  }
+
+  /* ── Animações gerais ───────────────────────────────── */
+  @keyframes fade-down {
+    from { opacity: 0; transform: translateY(-24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Config Banner ───────────────────────────────────── */
+  .config-banner {
+    background: rgba(200,169,110,0.08);
+    border: 1px dashed rgba(200,169,110,0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.78rem;
+    color: var(--gold);
+    text-align: center;
+  }
+
+  .config-banner code {
+    background: rgba(0,0,0,0.3);
+    padding: 2px 6px; border-radius: 4px;
+    font-size: 0.72rem; color: var(--gold-lt);
+  }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 540px) {
+    .card { padding: 2rem 1.25rem; }
+    .header h1 { font-size: 1.35rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Fundo -->
+<div class="bg-canvas"></div>
+<div class="bg-grid"></div>
+
+<!-- Partículas -->
+<div id="particles"></div>
+
+<div class="page">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="cross-symbol">✝</div>
+      <h1>Mensageiro Bíblico<br><span>Generativo</span></h1>
+      <p class="verse">
+        "A tua palavra é lâmpada que ilumina os meus passos<br>
+        e luz que clareia o meu caminho." — Sl 119:105
+      </p>
+    </div>
+
+    <!-- Card -->
+    <div class="card">
+
+      <!-- Banner de configuração (remova após configurar a API) -->
+      <div class="config-banner" id="configBanner">
+        ⚙ Configure a URL da API antes de usar:<br>
+        edite a variável <code>API_URL</code> no início do script
+      </div>
+
+      <p class="card-title">
+        Receba toda manhã uma mensagem bíblica<br>
+        gerada por Inteligência Artificial — gratuito
+      </p>
+
+      <!-- Formulário -->
+      <form id="registrationForm" novalidate>
+
+        <!-- Nome -->
+        <div class="field">
+          <label for="nome">Nome Completo</label>
+          <div class="input-wrap">
+            <input type="text" id="nome" name="nome"
+              placeholder="Seu nome completo" autocomplete="name">
+            <span class="icon">✦</span>
+          </div>
+          <div class="field-error" id="nome-error">Por favor, informe seu nome.</div>
+        </div>
+
+        <!-- E-mail -->
+        <div class="field">
+          <label for="email">E-mail</label>
+          <div class="input-wrap">
+            <input type="email" id="email" name="email"
+              placeholder="seu@email.com" autocomplete="email">
+            <span class="icon">✉</span>
+          </div>
+          <div class="field-error" id="email-error">Informe um e-mail válido.</div>
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="field">
+          <label for="whatsapp">
+            WhatsApp
+            <span class="optional">(opcional — para notificações futuras)</span>
+          </label>
+          <div class="phone-wrap">
+            <select id="ddi" name="ddi">
+              <option value="+55">🇧🇷 +55</option>
+            </select>
+            <input type="tel" id="whatsapp" name="whatsapp"
+              placeholder="(71) 99999-9999" autocomplete="tel">
+          </div>
+          <div class="field-error" id="whatsapp-error">Formato inválido.</div>
+        </div>
+
+        <!-- Como conheceu -->
+        <div class="field">
+          <label for="origem">
+            Como conheceu o serviço
+            <span class="optional">(opcional)</span>
+          </label>
+          <div class="input-wrap">
+            <select id="origem" name="origem">
+              <option value="">Selecione...</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="instagram">Instagram</option>
+              <option value="indicacao">Indicação de amigo</option>
+              <option value="igreja">Igreja / Comunidade</option>
+              <option value="outro">Outro</option>
+            </select>
+            <span class="icon">◈</span>
+          </div>
+        </div>
+
+        <!-- Consentimento -->
+        <div class="consent">
+          <input type="checkbox" id="consent" name="consent">
+          <label for="consent">
+            Concordo em receber diariamente a <b>Mensagem Bíblica</b>
+            no e-mail informado. Posso cancelar a qualquer momento
+            solicitando a remoção do cadastro.
+          </label>
+        </div>
+        <div class="field-error" id="consent-error" style="margin-top:-1rem; margin-bottom:1rem;">
+          É necessário aceitar para se cadastrar.
+        </div>
+
+        <!-- Botão -->
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="btn-text">✦ QUERO RECEBER AS MENSAGENS ✦</span>
+          <div class="spinner"></div>
+        </button>
+
+      </form>
+
+      <!-- Painel de sucesso -->
+      <div class="success-panel" id="successPanel">
+        <div class="success-icon">🙏</div>
+        <h2>Cadastro Realizado!</h2>
+        <p>
+          Bem-vindo(a), <span class="name-highlight" id="successName"></span>!<br><br>
+          A partir de amanhã você receberá toda manhã<br>
+          uma mensagem bíblica inspiradora no seu e-mail.<br><br>
+          <em>"Que o Senhor te abençoe e te guarde."</em><br>
+          — Nm 6:24
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      Mensageiro Bíblico Generativo · AWS Serverless ·
+      <a href="https://github.com/faanogueira/aws-biblical-messenger" target="_blank">
+        github.com/faanogueira
+      </a>ib
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ⚙ CONFIGURAÇÃO — altere esta URL após criar o API Gateway
+// ══════════════════════════════════════════════════════
+const API_URL = "https://eqe1dc4dck.execute-api.us-east-1.amazonaws.com/prod/cadastro";
+// ══════════════════════════════════════════════════════
+
+// ── Partículas ─────────────────────────────────────────
+(function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random() * 100}vw;
+      animation-duration:${12 + Math.random() * 18}s;
+      animation-delay:${Math.random() * 15}s;
+    `;
+    container.appendChild(p);
+  }
+})();
+
+// ── Validação ──────────────────────────────────────────
+function showError(id, msg) {
+  const el = document.getElementById(id + '-error');
+  const input = document.getElementById(id);
+  if (el) { el.textContent = msg || el.textContent; el.classList.add('visible'); }
+  if (input) input.classList.add('error');
+}
+
+function clearError(id) {
+  const el = document.getElementById(id + '-error');
+  const input = document.getElementById(id);
+  if (el) el.classList.remove('visible');
+  if (input) { input.classList.remove('error'); input.classList.remove('success'); }
+}
+
+function markSuccess(id) {
+  const input = document.getElementById(id);
+  if (input) { input.classList.remove('error'); input.classList.add('success'); }
+}
+
+// Validação em tempo real
+['nome', 'email', 'whatsapp'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', () => {
+    clearError(id);
+    if (id === 'email' && el.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value))
+      return;
+    if (el.value.trim()) markSuccess(id);
+  });
+});
+
+// ── Formatação automática do telefone ─────────────────
+document.getElementById('whatsapp').addEventListener('input', function () {
+  let v = this.value.replace(/\D/g, '');
+  if (v.length > 11) v = v.slice(0, 11);
+  if (v.length > 10)
+    v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+  else if (v.length > 6)
+    v = `(${v.slice(0,2)}) ${v.slice(2,6)}-${v.slice(6)}`;
+  else if (v.length > 2)
+    v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+  this.value = v;
+});
+
+// ── Submit ─────────────────────────────────────────────
+document.getElementById('registrationForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const nome     = document.getElementById('nome').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+  const ddi      = document.getElementById('ddi').value;
+  const origem   = document.getElementById('origem').value;
+  const consent  = document.getElementById('consent').checked;
+
+  let valid = true;
+
+  // Validar nome
+  if (!nome) {
+    showError('nome', 'Por favor, informe seu nome.'); valid = false;
+  } else if (nome.length < 3) {
+    showError('nome', 'Nome muito curto.'); valid = false;
+  } else { markSuccess('nome'); }
+
+  // Validar e-mail
+  if (!email) {
+    showError('email', 'Por favor, informe seu e-mail.'); valid = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError('email', 'E-mail inválido.'); valid = false;
+  } else { markSuccess('email'); }
+
+  // Validar WhatsApp (opcional — mas se preenchido, valida)
+  if (whatsapp) {
+    const digits = whatsapp.replace(/\D/g, '');
+    if (digits.length < 10 || digits.length > 11) {
+      showError('whatsapp', 'Número inválido. Ex: (71) 99999-9999'); valid = false;
+    } else { markSuccess('whatsapp'); }
+  }
+
+  // Validar consentimento
+  if (!consent) {
+    showError('consent', 'É necessário aceitar para se cadastrar.'); valid = false;
+  }
+
+  if (!valid) return;
+
+  // Montar payload
+  const now = new Date().toISOString();
+  const whatsappFormatted = whatsapp
+    ? ddi + whatsapp.replace(/\D/g, '')
+    : null;
+
+  const payload = {
+    email,
+    nome,
+    ativo: true,
+    data_cadastro: now,
+    ...(whatsappFormatted && { whatsapp: whatsappFormatted }),
+    ...(origem && { origem }),
+    ultimo_envio: "",
+    ultimo_status: "",
+    ultimo_message_id: ""
+  };
+
+  // Loading state
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${response.status}`);
+    }
+
+    // Sucesso
+    document.getElementById('registrationForm').style.display = 'none';
+    document.getElementById('configBanner').style.display = 'none';
+    document.getElementById('successName').textContent = nome.split(' ')[0];
+    document.getElementById('successPanel').classList.add('visible');
+
+  } catch (err) {
+    console.error('Erro no cadastro:', err);
+
+    // Se API não configurada, mostra instrução útil
+    if (API_URL.includes('SEU_API_ID')) {
+      alert('⚙ API não configurada.\n\nEdite a variável API_URL no script com a URL do seu API Gateway.');
+    } else {
+      alert('Erro ao realizar cadastro. Tente novamente.\n\nDetalhe: ' + err.message);
+    }
+
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+});
+</script>
+</body>
+</html>
